@@ -108,4 +108,5 @@ int main()
 	root = Insert_BT(root, 4);
 	root = Insert_BT(root, 2);
 	Delete_BT(root, 2);
+	std::cout << "commit test" << std::endl;
 }

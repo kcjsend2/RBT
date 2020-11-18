@@ -20,7 +20,81 @@ public:
 
 Node* ROOT;
 
-Node* Check_Tree(Node* root, Node* NIL, bool PrevColor, int level)
+void Left_Rotate(Node*& node, Node* NIL)
+{
+	if (node->Right == NIL || node == NIL)
+	{
+		return;
+	}
+
+	Node* tmp = node->Right;
+
+	node->Right = node->Right->Left;
+
+	if (NIL != node->Right)
+	{
+		node->Right->Parent = node;
+	}
+
+	tmp->Left = node;
+	tmp->Parent = node->Parent;
+
+	if (node->Parent != NIL)
+	{
+		if (node->Parent->Left == node)
+			node->Parent->Left = tmp;
+		else
+			node->Parent->Right = tmp;
+	}
+
+	node->Parent = tmp;
+
+	if (ROOT == node)
+	{
+		ROOT = tmp;
+	}
+}
+
+void Right_Rotate(Node*& node, Node* NIL)
+{
+	if (node->Left == NIL || node == NIL)
+	{
+		return;
+	}
+
+	Node* tmp = node->Left;
+
+	node->Left = node->Left->Right;
+
+	if (node->Left != NIL)
+	{
+		node->Left->Parent = node;
+	}
+
+	tmp->Right = node;
+	tmp->Parent = node->Parent;
+
+	if (node->Parent != NIL)
+	{
+		if (node->Parent->Left == node)
+		{
+			node->Parent->Left = tmp;
+		}
+		else
+		{
+			node->Parent->Right = tmp;
+		}
+	}
+
+	node->Parent = tmp;
+
+	if (ROOT == node)
+	{
+		ROOT = tmp;
+	}
+}
+
+void Check_Tree(Node*& root, Node*& NIL, bool PrevColor, int level)
 {
 	if (level == 0)
 	{
@@ -35,6 +109,7 @@ Node* Check_Tree(Node* root, Node* NIL, bool PrevColor, int level)
 		{
 			cout << "규칙 위반 발생! " << level << "번 층의 " << root->key << "의 값을 가진 노드" << endl;
 			cout << "사유 : 루트 노드가 레드" << endl;
+			root->Color = BLACK;
 		}
 	}
 	else
@@ -118,81 +193,8 @@ Node* Check_Tree(Node* root, Node* NIL, bool PrevColor, int level)
 	}
 }
 
-void Left_Rotate(Node* node, Node* NIL)
-{
-	if (node->Right == NIL || node == NIL)
-	{
-		return;
-	}
 
-	Node* tmp = node->Right;
-
-	node->Right = node->Right->Left;
-
-	if (NIL != node->Right)
-	{
-		node->Right->Parent = node;
-	}
-
-	tmp->Left = node;
-	tmp->Parent = node->Parent;
-
-	if (node->Parent != NIL)
-	{
-		if (node->Parent->Left == node)
-			node->Parent->Left = tmp;
-		else
-			node->Parent->Right = tmp;
-	}
-
-	node->Parent = tmp;
-
-	if (ROOT == node)
-	{
-		ROOT = tmp;
-	}
-}
-
-void Right_Rotate(Node* node, Node* NIL)
-{
-	if (node->Left == NIL || node == NIL)
-	{
-		return;
-	}
-
-	Node* tmp = node->Left;
-
-	node->Left = node->Left->Right;
-
-	if (node->Left != NIL)
-	{
-		node->Left->Parent = node;
-	}
-
-	tmp->Right = node;
-	tmp->Parent = node->Parent;
-
-	if (node->Parent != NIL)
-	{
-		if (node->Parent->Left == node)
-		{
-			node->Parent->Left = tmp;
-		}
-		else
-		{
-			node->Parent->Right = tmp;
-		}
-	}
-
-	node->Parent = tmp;
-
-	if (ROOT == node)
-	{
-		ROOT = tmp;
-	}
-}
-
-void Init_BT(Node* root, Node* NIL, int key)
+void Init_BT(Node*& root, Node*& NIL, int key)
 {
 	NIL = (Node*)malloc(sizeof(Node));
 	NIL->Parent = NULL;
@@ -200,7 +202,7 @@ void Init_BT(Node* root, Node* NIL, int key)
 	NIL->Right = NULL;
 	NIL->Color = BLACK;
 
-	Node* root = (Node*)malloc(sizeof(Node));
+	root = (Node*)malloc(sizeof(Node));
 	root->Parent = NIL;
 	root->key = key;
 	root->Left = NIL;
@@ -208,9 +210,9 @@ void Init_BT(Node* root, Node* NIL, int key)
 	root->Color = BLACK;
 }
 
-Node* Insert_BT(Node* root, Node* NIL, int key, int level)
+void Insert_BT(Node*& root, Node*& NIL, int key, int level)
 {
-	if (root->key < key)
+	if (root->key > key)
 	{
 		if (root->Left == NIL)
 		{
@@ -220,14 +222,14 @@ Node* Insert_BT(Node* root, Node* NIL, int key, int level)
 			newNode->Right = NIL;
 			newNode->Color = RED;
 			newNode->Parent = root;
-			root->Left = NIL;
+			root->Left = newNode;
 		}
 		else
 		{
 			Insert_BT(root->Left, NIL, key, level + 1);
 		}
 	}
-	else if (root->key > key)
+	else if (root->key < key)
 	{
 		if (root->Right == NIL)
 		{
@@ -237,7 +239,7 @@ Node* Insert_BT(Node* root, Node* NIL, int key, int level)
 			newNode->Right = NIL;
 			newNode->Color = RED;
 			newNode->Parent = root;
-			root->Right = NIL;
+			root->Right = newNode;
 		}
 		else
 		{
@@ -315,6 +317,28 @@ int main()
 {
 	Node* NIL = NULL;
 
-	Init_BT(ROOT, NIL, 0);
+	Init_BT(ROOT, NIL, 15);
+	Insert_BT(ROOT, NIL, 5, 0);
+	Check_Tree(ROOT, NIL, BLACK, 0);
 
+	Insert_BT(ROOT, NIL, 25, 0);
+	Check_Tree(ROOT, NIL, BLACK, 0);
+
+	Insert_BT(ROOT, NIL, 3, 0);
+	Check_Tree(ROOT, NIL, BLACK, 0);
+
+	Insert_BT(ROOT, NIL, 11, 0);
+	Check_Tree(ROOT, NIL, BLACK, 0);
+
+	Insert_BT(ROOT, NIL, 6, 0);
+	Check_Tree(ROOT, NIL, BLACK, 0);
+
+	Insert_BT(ROOT, NIL, 18, 0);
+	Check_Tree(ROOT, NIL, BLACK, 0);
+
+	Insert_BT(ROOT, NIL, 20, 0);
+	Check_Tree(ROOT, NIL, BLACK, 0);
+
+	Insert_BT(ROOT, NIL, 40, 0);
+	Check_Tree(ROOT, NIL, BLACK, 0);
 }

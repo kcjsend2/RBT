@@ -18,6 +18,7 @@ public:
 	Node* Right;
 };
 
+Node* ROOT;
 
 Node* Check_Tree(Node* root, Node* NIL, bool PrevColor, int level)
 {
@@ -30,25 +31,164 @@ Node* Check_Tree(Node* root, Node* NIL, bool PrevColor, int level)
 			if (root->Right != NIL)
 				Check_Tree(root->Right, NIL, BLACK, level + 1);
 		}
+		else
+		{
+			cout << "규칙 위반 발생! " << level << "번 층의 " << root->key << "의 값을 가진 노드" << endl;
+			cout << "사유 : 루트 노드가 레드" << endl;
+		}
 	}
 	else
 	{
-		if (root->Color == BLACK)
-		{
-			if (PrevColor == BLACK)
-			{
-				cout << "규칙 위반 발생! " << level << "층의 " << root->key << "의 값을 가진 노드" << endl;
-				cout << "사유 : 부모와 자식의 색이 같음, 색 : BLACK, NIL 아님" << endl;
-			}
-		}
-		else if (root->Color == RED)
+		if (root->Color == RED)
 		{
 			if (PrevColor == RED)
 			{
-				cout << "규칙 위반 발생! " << level << "층의 " << root->key << "의 값을 가진 노드" << endl;
-				cout << "사유 : 부모와 자식의 색이 같음, 색 : RED, NIL 아님" << endl;
+				cout << "규칙 위반 발생! " << level << "번 층의 " << root->key << "의 값을 가진 노드" << endl;
+				cout << "사유 : 부모가 레드인데 자식도 레드" << endl;
+
+				//삼촌 노드 체크
+
+				//부모가 왼쪽 노드일때
+				if (root->Parent->Parent->Left == root->Parent)
+				{
+					//삼촌 노드가 블랙/NIL일때 회전
+					if (root->Parent->Parent->Right->Color == BLACK)
+					{
+						Right_Rotate(root->Parent->Parent, NIL);
+					}
+					//삼촌 노드가 레드일때 색상변경
+					else if (root->Parent->Parent->Right->Color == RED)
+					{
+						//조부모를 레드, 부모를 블랙, 삼촌을 블랙으로
+						root->Parent->Color = BLACK;
+
+						//증조부모가 NIL이면 조부모는 루트 노드
+						if (root->Parent->Parent->Parent == NIL)
+						{
+							//루트 노드는 항상 블랙
+							root->Parent->Parent->Color = BLACK;
+						}
+						else
+						{
+							//조부모가 루트노드가 아닐경우
+							root->Parent->Parent->Color = RED;
+						}
+
+						root->Parent->Parent->Right->Color = BLACK;
+					}
+				}
+
+				//부모가 오른쪽 노드일때
+				else if (root->Parent->Parent->Right == root->Parent)
+				{
+					//삼촌 노드가 블랙/NIL일때 회전
+					if (root->Parent->Parent->Left->Color == BLACK)
+					{
+						Left_Rotate(root->Parent->Parent, NIL);
+					}
+					//삼촌 노드가 레드일때 색상변경
+					else if (root->Parent->Parent->Left->Color == RED)
+					{
+						//조부모를 레드, 부모를 블랙, 삼촌을 블랙으로
+						root->Parent->Color = BLACK;
+
+						//증조부모가 NIL이면 조부모는 루트 노드
+						if (root->Parent->Parent->Parent == NIL)
+						{
+							//루트 노드는 항상 블랙
+							root->Parent->Parent->Color = BLACK;
+						}
+						else
+						{
+							//조부모가 루트노드가 아닐경우
+							root->Parent->Parent->Color = RED;
+						}
+
+						root->Parent->Parent->Left->Color = BLACK;
+					}
+				}
+
 			}
 		}
+
+		if (root->Left != NIL)
+			Check_Tree(root->Left, NIL, root->Color, level + 1);
+		if (root->Right != NIL)
+			Check_Tree(root->Right, NIL, root->Color, level + 1);
+	}
+}
+
+void Left_Rotate(Node* node, Node* NIL)
+{
+	if (node->Right == NIL || node == NIL)
+	{
+		return;
+	}
+
+	Node* tmp = node->Right;
+
+	node->Right = node->Right->Left;
+
+	if (NIL != node->Right)
+	{
+		node->Right->Parent = node;
+	}
+
+	tmp->Left = node;
+	tmp->Parent = node->Parent;
+
+	if (node->Parent != NIL)
+	{
+		if (node->Parent->Left == node)
+			node->Parent->Left = tmp;
+		else
+			node->Parent->Right = tmp;
+	}
+
+	node->Parent = tmp;
+
+	if (ROOT == node)
+	{
+		ROOT = tmp;
+	}
+}
+
+void Right_Rotate(Node* node, Node* NIL)
+{
+	if (node->Left == NIL || node == NIL)
+	{
+		return;
+	}
+
+	Node* tmp = node->Left;
+
+	node->Left = node->Left->Right;
+
+	if (node->Left != NIL)
+	{
+		node->Left->Parent = node;
+	}
+
+	tmp->Right = node;
+	tmp->Parent = node->Parent;
+
+	if (node->Parent != NIL)
+	{
+		if (node->Parent->Left == node)
+		{
+			node->Parent->Left = tmp;
+		}
+		else
+		{
+			node->Parent->Right = tmp;
+		}
+	}
+
+	node->Parent = tmp;
+
+	if (ROOT == node)
+	{
+		ROOT = tmp;
 	}
 }
 
@@ -174,9 +314,7 @@ void Delete_BT(Node* root, int key)
 int main()
 {
 	Node* NIL = NULL;
-	Node* root = NULL;
 
-	Init_BT(root, NIL, 0);
-
+	Init_BT(ROOT, NIL, 0);
 
 }

@@ -19,39 +19,39 @@ public:
 };
 
 
-void Left_Rotate(Node*& ROOT, Node* node, Node* NIL)
+void Left_Rotate(Node*& ROOT, Node* pivot, Node* NIL)
 {
-	if (node->Right == NIL || node == NIL)
+	if (pivot->Right == NIL || pivot == NIL)
 	{
 		return;
 	}
 
-	Node* tmp = node->Right;
+	Node* tmp = pivot->Right;
 
-	node->Right = node->Right->Left;
+	pivot->Right = pivot->Right->Left;
 
-	if (NIL != node->Right)
+	if (NIL != pivot->Right)
 	{
-		node->Right->Parent = node;
+		pivot->Right->Parent = pivot;
 	}
 
-	tmp->Left = node;
-	Node* ptmp = node;
-	tmp->Parent = node->Parent;
+	tmp->Left = pivot;
+	Node* ptmp = pivot;
+	tmp->Parent = pivot->Parent;
 
-	if (node->Parent != NIL)
+	if (pivot->Parent != NULL)
 	{
-		if (node->Parent->Left == node)
+		if (pivot->Parent->Left == pivot)
 		{
-			node->Parent->Left = tmp;
+			pivot->Parent->Left = tmp;
 		}
 		else
 		{
-			node->Parent->Right = tmp;
+			pivot->Parent->Right = tmp;
 		}
 	}
 
-	node->Parent = tmp;
+	pivot->Parent = tmp;
 
 	if (ROOT == ptmp)
 	{

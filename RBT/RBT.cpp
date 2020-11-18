@@ -59,35 +59,35 @@ void Left_Rotate(Node*& ROOT, Node* node, Node* NIL)
 	}
 }
 
-void Right_Rotate(Node*& ROOT, Node* node, Node* NIL)
+void Right_Rotate(Node*& ROOT, Node* pivot, Node* NIL)
 {
-	if (node->Left == NIL || node == NIL)
+	if (pivot->Left == NIL || pivot == NIL)
 	{
 		return;
 	}
 
-	Node* tmp = node->Left;
+	Node* tmp = pivot->Left;
 
-	node->Left = node->Left->Right;
+	pivot->Left = pivot->Left->Right;
 
-	if (node->Left != NIL)
+	if (pivot->Left != NIL)
 	{
-		node->Left->Parent = node;
+		pivot->Left->Parent = pivot;
 	}
 
-	tmp->Right = node;
-	Node* ptmp = node;
-	tmp->Parent = node->Parent;
+	tmp->Right = pivot;
+	Node* ptmp = pivot;
+	tmp->Parent = pivot->Parent;
 
-	if (node->Parent != NULL)
+	if (pivot->Parent != NULL)
 	{
-		if (node->Parent->Left == node)
+		if (pivot->Parent->Left == pivot)
 		{
-			node->Parent->Left = tmp;
+			pivot->Parent->Left = tmp;
 		}
 		else
 		{
-			node->Parent->Right = tmp;
+			pivot->Parent->Right = tmp;
 		}
 	}
 

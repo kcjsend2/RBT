@@ -42,12 +42,20 @@ void Left_Rotate(Node*& ROOT, Node* node, Node* NIL)
 	if (node->Parent != NIL)
 	{
 		if (node->Parent->Left == node)
+		{
 			node->Parent->Left = tmp;
+		}
 		else
+		{
 			node->Parent->Right = tmp;
+		}
 	}
 
 	node->Parent = tmp;
+
+	tmp->Color = BLACK;
+	tmp->Left->Color = RED;
+	tmp->Right->Color = RED;
 
 	if (ROOT == ptmp)
 	{
@@ -88,6 +96,10 @@ void Right_Rotate(Node*& ROOT, Node* node, Node* NIL)
 	}
 
 	tmp->Right->Parent = tmp;
+	
+	tmp->Color = BLACK;
+	tmp->Left->Color = RED;
+	tmp->Right->Color = RED;
 
 	if (ROOT == ptmp)
 	{
@@ -95,7 +107,7 @@ void Right_Rotate(Node*& ROOT, Node* node, Node* NIL)
 	}
 }
 
-void Check_Tree(Node*& ROOT, Node*& node, Node*& NIL, bool PrevColor, int level)
+void Check_Tree(Node*& ROOT, Node* node, Node* NIL, bool PrevColor, int level)
 {
 	if (level == 0)
 	{

@@ -12,21 +12,23 @@ public:
 
 	bool Color; // BLACK : 0, RED : 1
 
+	Node* Parent;
+
 	Node* Left;
 	Node* Right;
 };
 
 
-Node* Check_Tree(Node* root, bool PrevColor, int level)
+Node* Check_Tree(Node* root, Node* NIL, bool PrevColor, int level)
 {
 	if (level == 0)
 	{
 		if (root->Color == BLACK)
 		{
-			if(root->Left != NULL)
-				Check_Tree(root->Left, BLACK, level + 1);
-			if (root->Right != NULL)
-				Check_Tree(root->Right, BLACK, level + 1);
+			if(root->Left != NIL)
+				Check_Tree(root->Left, NIL, BLACK, level + 1);
+			if (root->Right != NIL)
+				Check_Tree(root->Right, NIL, BLACK, level + 1);
 		}
 	}
 	else
@@ -53,11 +55,13 @@ Node* Check_Tree(Node* root, bool PrevColor, int level)
 void Init_BT(Node* root, Node* NIL, int key)
 {
 	NIL = (Node*)malloc(sizeof(Node));
+	NIL->Parent = NULL;
 	NIL->Left = NULL;
 	NIL->Right = NULL;
 	NIL->Color = BLACK;
 
 	Node* root = (Node*)malloc(sizeof(Node));
+	root->Parent = NIL;
 	root->key = key;
 	root->Left = NIL;
 	root->Right = NIL;
@@ -75,6 +79,7 @@ Node* Insert_BT(Node* root, Node* NIL, int key, int level)
 			newNode->Left = NIL;
 			newNode->Right = NIL;
 			newNode->Color = RED;
+			newNode->Parent = root;
 			root->Left = NIL;
 		}
 		else
@@ -91,6 +96,7 @@ Node* Insert_BT(Node* root, Node* NIL, int key, int level)
 			newNode->Left = NIL;
 			newNode->Right = NIL;
 			newNode->Color = RED;
+			newNode->Parent = root;
 			root->Right = NIL;
 		}
 		else
@@ -98,7 +104,6 @@ Node* Insert_BT(Node* root, Node* NIL, int key, int level)
 			Insert_BT(root->Right, NIL, key, level + 1);
 		}
 	}
-
 }
 
 void Delete_BT(Node* root, int key)

@@ -99,17 +99,18 @@ void Right_Rotate(Node*& ROOT, Node* pivot, Node* NIL)//ROOT는 최상단, pivot
 		ROOT = tmp;												//최상단에 A를 위치시킴.
 	}
 }
+
 //1.루트는 블랙이다, 2.모든 리프는 블랙이다, 3.노드가 레드이면 그 자식은 반드시 블랙이다, 4.루트 노드에서 임의의 리프 노드에 이르는 경로에서 만나는 블랙 노드의 수는 모두 같다.
-void Check_Tree(Node*& ROOT, Node* node, Node* NIL, bool PrevColor, int level) //ROOT는 최상단, node는 삽입노드, NIL은 NIL, PrevColor는 부모노드의 색상, level은 위부터 아래로의 층수
+void RBT_Insert_Fixup(Node*& ROOT, Node* node, Node* NIL, bool PrevColor, int level) //ROOT는 최상단, node는 삽입노드, NIL은 NIL, PrevColor는 부모노드의 색상, level은 위부터 아래로의 층수
 {
 	if (level == 0)
 	{
 		if (node->Color == BLACK)
 		{
 			if (node->Left != NIL)
-				Check_Tree(ROOT, node->Left, NIL, BLACK, level + 1);//다음레벨 왼쪽으로
+				RBT_Insert_Fixup(ROOT, node->Left, NIL, BLACK, level + 1);//다음레벨 왼쪽으로
 			if (node->Right != NIL)
-				Check_Tree(ROOT, node->Right, NIL, BLACK, level + 1);//다음레벨 오른쪽으로
+				RBT_Insert_Fixup(ROOT, node->Right, NIL, BLACK, level + 1);//다음레벨 오른쪽으로
 		}
 		else
 		{
@@ -171,7 +172,7 @@ void Check_Tree(Node*& ROOT, Node* node, Node* NIL, bool PrevColor, int level) /
 							node->Parent->Parent->Right->Color = BLACK;
 
 							//재귀적인 경우 한번 더 체크
-							Check_Tree(ROOT, ROOT, NIL, BLACK, 0);
+							RBT_Insert_Fixup(ROOT, ROOT, NIL, BLACK, 0);
 						}
 
 					}
@@ -223,7 +224,7 @@ void Check_Tree(Node*& ROOT, Node* node, Node* NIL, bool PrevColor, int level) /
 							node->Parent->Parent->Left->Color = BLACK;
 
 							//재귀적인 경우 한번 더 체크
-							Check_Tree(ROOT, ROOT, NIL, BLACK, 0);
+							RBT_Insert_Fixup(ROOT, ROOT, NIL, BLACK, 0);
 						}	
 
 					}
@@ -233,9 +234,9 @@ void Check_Tree(Node*& ROOT, Node* node, Node* NIL, bool PrevColor, int level) /
 		}
 
 		if (node->Left != NIL)
-			Check_Tree(ROOT, node->Left, NIL, node->Color, level + 1);
+			RBT_Insert_Fixup(ROOT, node->Left, NIL, node->Color, level + 1);
 		if (node->Right != NIL)
-			Check_Tree(ROOT, node->Right, NIL, node->Color, level + 1);
+			RBT_Insert_Fixup(ROOT, node->Right, NIL, node->Color, level + 1);
 	}
 }
 
@@ -295,7 +296,7 @@ void Insert_RBT(Node*& root, Node*& NIL, int key, int level)
 
 	if (level == 0)
 	{
-		Check_Tree(root, root, NIL, BLACK, 0);
+		RBT_Insert_Fixup(root, root, NIL, BLACK, 0);
 	}
 }
 
@@ -409,7 +410,7 @@ void Delete(Node*& root, Node* node, Node* NIL, int value)
 	else if (value == 4) // 2-1
 	{
 		node->Parent->Right->Color = RED;							 // 형제 노드의 색깔을 블랙에서 레드로 변경.
-		Check_Tree(root, root, NIL, BLACK, 0);						 // 균형이 깨졌으므로 수정.
+		RBT_Insert_Fixup(root, root, NIL, BLACK, 0);						 // 균형이 깨졌으므로 수정.
 	}
 	else if (value == 5) // 2-4
 	{

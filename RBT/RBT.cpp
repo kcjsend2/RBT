@@ -362,6 +362,44 @@ void Delete_BT(Node* root, int key)
 		}
 	}
 }
+
+void Delete_RBT(Node*& ROOT, Node* NIL, Node* node)
+{
+	Node* successor, * fixupNode;
+	Node* uncle = node->Parent->Right;
+	if (ROOT == NULL)
+	{
+		return;
+	}
+	if (uncle->Color == BLACK && uncle->Right->Color == RED) // case *-2
+	{
+
+	}
+	else if (uncle->Color == BLACK && uncle->Left->Color == RED && uncle->Right->Color == BLACK) // case*-3
+	{
+
+	}
+	else if (node->Parent->Color== RED)
+	{
+		if (uncle->Left->Color == BLACK && uncle->Color == BLACK) // case 1-1
+		{
+			node->Parent->Color = BLACK;
+			node->Parent->Right->Color = RED;
+		}
+	}
+	else if (node->Parent->Color == BLACK)
+	{
+		if (uncle->Color == BLACK && uncle->Left->Color == BLACK && uncle->Right->Color == BLACK) // case 2-1
+		{
+
+		}
+		else if (uncle->Color == RED && uncle->Left->Color == BLACK && uncle->Right->Color == BLACK) // case 2-4
+		{
+
+		}
+	}
+}
+
 void Print_RBT(Node* node, int max_level, int my_level, int cnt)//색깔 블랙, 레드 나눠서 출력
 {
 

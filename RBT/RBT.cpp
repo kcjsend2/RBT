@@ -406,7 +406,9 @@ void Delete_RBT(Node*& root, Node* NIL, Node* node)
 		}
 		else if (uncle->Color == RED && uncle->Left->Color == BLACK && uncle->Right->Color == BLACK) // case 2-4
 		{
-
+			node->Parent->Color = RED;
+			node->Parent->Right->Color = BLACK;
+			Left_Rotate(node->Parent, node->Parent->Right, NIL);
 		}
 	}
 }

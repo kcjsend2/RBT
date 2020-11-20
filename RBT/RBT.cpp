@@ -363,10 +363,10 @@ void Delete_BT(Node* root, int key)
 	}
 }
 
-void Delete_RBT(Node*& ROOT, Node* NIL, Node* node)
+void Delete_RBT(Node*& root, Node* NIL, Node* node)
 {
 	Node* uncle = node->Parent->Right;
-	if (ROOT == NULL)
+	if (root == NULL)
 	{
 		return;
 	}
@@ -401,7 +401,8 @@ void Delete_RBT(Node*& ROOT, Node* NIL, Node* node)
 	{
 		if (uncle->Color == BLACK && uncle->Left->Color == BLACK && uncle->Right->Color == BLACK) // case 2-1
 		{
-
+			node->Parent->Right->Color = RED;							 // 형제 노드의 색깔을 블랙에서 레드로 변경.
+			Check_Tree(root, root, NIL, BLACK, 0);
 		}
 		else if (uncle->Color == RED && uncle->Left->Color == BLACK && uncle->Right->Color == BLACK) // case 2-4
 		{

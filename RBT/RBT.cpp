@@ -21,7 +21,6 @@ public:
 	Node* Left;
 	Node* Right;
 };
-
 void check_tree_recursion(Node* p, Node* NIL, int B_sofar, int B_total)
 {
 	if (p == NIL)
@@ -507,7 +506,12 @@ void Delete_RBT(Node*& root, Node* NIL, int key)
 
 void Print_RBT(Node* node, int max_level, int my_level, int cnt)//색깔 블랙, 레드 나눠서 출력
 {
-
+	if (node->key==-1)
+	{
+		for (int i = 0; i < max_level - my_level; ++i)//레벨 별 간격 띄우기
+			cout << "         ";//spacebar 5번
+		return;
+	}
 	if (node->Color == BLACK)
 	{
 		for (int i = 0; i < max_level - my_level; ++i)//레벨 별 간격 띄우기
@@ -577,8 +581,20 @@ void RBT_queue_Print(queue<Node*>q, Node* NIL, Node* ROOT)//Dequeue할 때 Print
 
 		if (tmp->Left != NIL)
 			q.push(tmp->Left);//왼쪽 노드 탐색 후 큐에 넣기
+		else
+		{
+			Node* blank = new Node;
+			blank->key = -1;
+			q.push(blank);
+		}
 		if (tmp->Right != NIL)
 			q.push(tmp->Right);//오른쪽 노드 탐색 후 큐에 넣기
+		else
+		{
+			Node* blank = new Node;
+			blank->key = -1;
+			q.push(blank);
+		}
 	}
 	cout << endl;
 	cout << "출력종료" << endl;

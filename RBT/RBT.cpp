@@ -363,7 +363,6 @@ void Delete_BT(Node* root, int key)
 	}
 }
 
-
 void Delete(Node*& root, Node* node, Node* NIL, int value)
 {
 	if (value == 1)
@@ -404,17 +403,17 @@ void Delete(Node*& root, Node* node, Node* NIL, int value)
 
 void Delete_RBT(Node*& root, Node* node, Node* NIL)
 {
-	Node* uncle = node->Parent->Right;
+	Node* siblings = node->Parent->Right;
 	int value = 0;
 	if (root == NULL)
 	{
 		return;
 	}
-	if (uncle->Color == BLACK && uncle->Right->Color == RED)				 // case *-2
+	if (siblings->Color == BLACK && siblings->Right->Color == RED)				 // case *-2
 	{
 		value = 2;
 	}
-	else if (uncle->Color == BLACK && uncle->Left->Color == RED && uncle->Right->Color == BLACK) // case*-3
+	else if (siblings->Color == BLACK && siblings->Left->Color == RED && siblings->Right->Color == BLACK) // case*-3
 	{
 		value = 3;
 	}

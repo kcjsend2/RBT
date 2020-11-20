@@ -240,7 +240,7 @@ void Check_Tree(Node*& ROOT, Node* node, Node* NIL, bool PrevColor, int level) /
 }
 
 
-void Init_BT(Node*& root, Node*& NIL, int key)
+void Init_RBT(Node*& root, Node*& NIL, int key)
 {
 	NIL = (Node*)malloc(sizeof(Node));
 	NIL->Parent = NULL;
@@ -256,7 +256,7 @@ void Init_BT(Node*& root, Node*& NIL, int key)
 	root->Color = BLACK;
 }
 
-void Insert_BT(Node*& root, Node*& NIL, int key, int level)
+void Insert_RBT(Node*& root, Node*& NIL, int key, int level)
 {
 	if (root->key > key)
 	{
@@ -272,7 +272,7 @@ void Insert_BT(Node*& root, Node*& NIL, int key, int level)
 		}
 		else
 		{
-			Insert_BT(root->Left, NIL, key, level + 1);
+			Insert_RBT(root->Left, NIL, key, level + 1);
 		}
 	}
 	else if (root->key < key)
@@ -289,8 +289,13 @@ void Insert_BT(Node*& root, Node*& NIL, int key, int level)
 		}
 		else
 		{
-			Insert_BT(root->Right, NIL, key, level + 1);
+			Insert_RBT(root->Right, NIL, key, level + 1);
 		}
+	}
+
+	if (level == 0)
+	{
+		Check_Tree(root, root, NIL, BLACK, 0);
 	}
 }
 
@@ -443,42 +448,24 @@ int main()
 
 	queue<Node*>queue;
 
-	Init_BT(ROOT, NIL, 20);
-	RBT_queue_Print(queue, NIL, ROOT);
+	Init_RBT(ROOT, NIL, 20);
 
-	Insert_BT(ROOT, NIL, 15, 0);
-	Check_Tree(ROOT, ROOT, NIL, BLACK, 0);
-	RBT_queue_Print(queue, NIL, ROOT);
+	Insert_RBT(ROOT, NIL, 15, 0);
 
-	Insert_BT(ROOT, NIL, 3, 0);
-	Check_Tree(ROOT, ROOT, NIL, BLACK, 0);
-	RBT_queue_Print(queue, NIL, ROOT);
+	Insert_RBT(ROOT, NIL, 3, 0);
 
-	Insert_BT(ROOT, NIL, 12, 0);
-	Check_Tree(ROOT, ROOT, NIL, BLACK, 0);
-	RBT_queue_Print(queue, NIL, ROOT);
+	Insert_RBT(ROOT, NIL, 12, 0);
 
-	Insert_BT(ROOT, NIL, 5, 0);
-	Check_Tree(ROOT, ROOT, NIL, BLACK, 0);
-	RBT_queue_Print(queue, NIL, ROOT);
+	Insert_RBT(ROOT, NIL, 5, 0);
 
-	Insert_BT(ROOT, NIL, 11, 0);
-	Check_Tree(ROOT, ROOT, NIL, BLACK, 0);
-	RBT_queue_Print(queue, NIL, ROOT);
+	Insert_RBT(ROOT, NIL, 11, 0);
 
-	Insert_BT(ROOT, NIL, 6, 0);
-	Check_Tree(ROOT, ROOT, NIL, BLACK, 0);
-	RBT_queue_Print(queue, NIL, ROOT);
+	Insert_RBT(ROOT, NIL, 6, 0);
 
-	Insert_BT(ROOT, NIL, 40, 0);
-	Check_Tree(ROOT, ROOT, NIL, BLACK, 0);
-	RBT_queue_Print(queue, NIL, ROOT);
+	Insert_RBT(ROOT, NIL, 40, 0);
 
-	Insert_BT(ROOT, NIL, 25, 0);
-	Check_Tree(ROOT, ROOT, NIL, BLACK, 0);
-	RBT_queue_Print(queue, NIL, ROOT);
+	Insert_RBT(ROOT, NIL, 25, 0);
 
-	Insert_BT(ROOT, NIL, 18, 0);
-	Check_Tree(ROOT, ROOT, NIL, BLACK, 0);
+	Insert_RBT(ROOT, NIL, 18, 0);
 	RBT_queue_Print(queue, NIL, ROOT);
 }

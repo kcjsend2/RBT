@@ -5,7 +5,6 @@
 #include<assert.h>
 
 #define RED 0
-
 #define BLACK 1
 
 using namespace std;
@@ -24,53 +23,39 @@ public:
 };
 
 void check_tree_recursion(Node* p, Node* NIL, int B_sofar, int B_total)
-
 {
-
 	if (p == NIL)
-
 	{
-
 		assert(B_sofar == B_total);
 
 		return;
-
 	}
 
 	check_tree_recursion(p->Left, NIL, B_sofar + (p->Left != NIL && p->Left->Color), B_total);
-
 	check_tree_recursion(p->Right, NIL, B_sofar + (p->Right != NIL && p->Right->Color), B_total);
 
 	if (p->Left)
-
 		assert(!(!p->Left->Color && !p->Color));
 
 	if (p->Right)
-
 		assert(!(!p->Right->Color && !p->Color));
 
 }
 
 void check_tree(Node* root, Node* NIL)
-
 {
-
 	int cnt = 0;
 
 	Node* p;
 
 	if (root == NIL)
-
 		return;
 
 	//root->color = BLACK;
-
 	for (p = root; p != NIL; p = p->Left)
-
 		cnt += p->Color;
 
 	check_tree_recursion(root, NIL, p->Color, cnt);
-
 }
 
 //A(왼쪽), B(오른쪽) 중에서 B가 root가 됨.(기존엔 A가 root)

@@ -1,9 +1,13 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
-#define BLACK 0
-#define RED 1
 #include <iostream>
 #include<queue>
 #include<cmath>
+#include<assert.h>
+
+#define RED 0
+
+#define BLACK 1
+
 using namespace std;
 
 class Node
@@ -18,6 +22,56 @@ public:
 	Node* Left;
 	Node* Right;
 };
+
+void check_tree_recursion(Node* p, Node* NIL, int B_sofar, int B_total)
+
+{
+
+	if (p == NIL)
+
+	{
+
+		assert(B_sofar == B_total);
+
+		return;
+
+	}
+
+	check_tree_recursion(p->Left, NIL, B_sofar + (p->Left != NIL && p->Left->Color), B_total);
+
+	check_tree_recursion(p->Right, NIL, B_sofar + (p->Right != NIL && p->Right->Color), B_total);
+
+	if (p->Left)
+
+		assert(!(!p->Left->Color && !p->Color));
+
+	if (p->Right)
+
+		assert(!(!p->Right->Color && !p->Color));
+
+}
+
+void check_tree(Node* root, Node* NIL)
+
+{
+
+	int cnt = 0;
+
+	Node* p;
+
+	if (root == NIL)
+
+		return;
+
+	//root->color = BLACK;
+
+	for (p = root; p != NIL; p = p->Left)
+
+		cnt += p->Color;
+
+	check_tree_recursion(root, NIL, p->Color, cnt);
+
+}
 
 //A(왼쪽), B(오른쪽) 중에서 B가 root가 됨.(기존엔 A가 root)
 void Left_Rotate(Node*& ROOT, Node* pivot, Node* NIL)	//ROOT는 최상단, pivot은 A, NIL은 최하단
@@ -410,7 +464,7 @@ void Delete(Node*& root, Node* node, Node* NIL, int value)
 	else if (value == 4) // 2-1
 	{
 		node->Parent->Right->Color = RED;							 // 형제 노드의 색깔을 블랙에서 레드로 변경.
-		RBT_Insert_Fixup(root, root, NIL, BLACK, 0);						 // 균형이 깨졌으므로 수정.
+		check_tree(root, NIL);						 // 균형이 깨졌으므로 수정.
 	}
 	else if (value == 5) // 2-4
 	{
@@ -424,6 +478,15 @@ void Delete(Node*& root, Node* node, Node* NIL, int value)
 void Delete_RBT(Node*& root, Node* NIL, int key)
 {
 	Node* node = Del_Search(root, NIL, key);
+	Node* tmp = NULL;
+	if ((node->Left == NIL && node->Right != NIL) || (node->Left != NIL && node->Right == NIL))
+	{
+
+	}
+	else
+	{
+		return;
+	}
 	Node* siblings = node->Parent->Right;
 	int value = 0;
 	if (siblings->Color == BLACK && siblings->Right->Color == RED)				 // case *-2

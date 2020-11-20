@@ -562,7 +562,7 @@ int main()
 
 	Insert_RBT(ROOT, NIL, 18, 0);
 
-	//Delete_RBT(ROOT, NIL, 3);
+	//Delete_RBT(ROOT, NIL, 40);
 	
 	RBT_queue_Print(queue, NIL, ROOT);
 }

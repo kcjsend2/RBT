@@ -363,6 +363,25 @@ void Delete_BT(Node* root, int key)
 	}
 }
 
+Node* Del_Search(Node*& root, Node* NIL, int key)
+{
+	if (root == NULL)
+	{
+		return root;
+	}
+	if (key < root->key)
+	{
+		Del_Search(root->Left, NIL, key);
+	}
+	else if (key > root->key)
+	{
+		Del_Search(root->Right, NIL, key);
+	}
+
+
+	return root;
+}
+
 void Delete(Node*& root, Node* node, Node* NIL, int value)
 {
 	if (value == 1) // 1-1
@@ -399,25 +418,6 @@ void Delete(Node*& root, Node* node, Node* NIL, int value)
 		Left_Rotate(node->Parent, node->Parent->Right, NIL);
 		Delete(root, node, NIL, 1);
 	}
-}
-
-Node* Del_Search(Node*& root, Node* NIL, int key)
-{
-	if (root == NULL)
-	{
-		return root;
-	}
-	if (key < root->key)
-	{
-		Del_Search(root->Left, NIL, key);
-	}
-	else if (key > root->key)
-	{
-		Del_Search(root->Right, NIL, key);
-	}
-	
-
-	return root;
 }
 
 void Delete_RBT(Node*& root, Node* NIL, int key)

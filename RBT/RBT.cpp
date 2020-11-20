@@ -162,17 +162,18 @@ void Check_Tree(Node*& ROOT, Node* node, Node* NIL, bool PrevColor, int level) /
 						{
 							//루트 노드는 항상 블랙
 							node->Parent->Parent->Color = BLACK;
+							node->Parent->Parent->Right->Color = BLACK;
 						}
 						else
 						{
 							//조부모가 루트노드가 아닐경우
 							node->Parent->Parent->Color = RED;
+							node->Parent->Parent->Right->Color = BLACK;
 
 							//재귀적인 경우 한번 더 체크
 							Check_Tree(ROOT, ROOT, NIL, BLACK, 0);
 						}
 
-						node->Parent->Parent->Right->Color = BLACK;
 					}
 				}
 
@@ -182,7 +183,7 @@ void Check_Tree(Node*& ROOT, Node* node, Node* NIL, bool PrevColor, int level) /
 					//삼촌 노드가 블랙/NIL일때 회전
 					if (node->Parent->Parent->Left->Color == BLACK)
 					{
-						//삽입한 노드가	부모의 오른쪽 자식인 경우
+						//삽입한 노드가	부모의 오른쪽 자식인 경우 
 						if (node == node->Parent->Right)
 						{
 							Left_Rotate(ROOT, node->Parent, NIL);
@@ -193,9 +194,13 @@ void Check_Tree(Node*& ROOT, Node* node, Node* NIL, bool PrevColor, int level) /
 						//삽입한 노드가 부모의 왼쪽 자식인 경우
 						else if (node == node->Parent->Left)
 						{
-							node->Parent->Parent->Color = RED;
-							node->Parent->Color = BLACK;
+							Left_Rotate(ROOT, node->Parent, NIL);
 							Right_Rotate(ROOT, node->Parent, NIL);
+							Left_Rotate(ROOT, node->Parent, NIL);
+
+							node->Color = BLACK;
+							node->Left->Color = RED;
+							node->Right->Color = RED;
 						}
 					}
 					//삼촌 노드가 레드일때 색상변경
@@ -209,17 +214,18 @@ void Check_Tree(Node*& ROOT, Node* node, Node* NIL, bool PrevColor, int level) /
 						{
 							//루트 노드는 항상 블랙
 							node->Parent->Parent->Color = BLACK;
+							node->Parent->Parent->Right->Color = BLACK;
 						}
 						else
 						{
 							//조부모가 루트노드가 아닐경우
 							node->Parent->Parent->Color = RED;
+							node->Parent->Parent->Left->Color = BLACK;
 
 							//재귀적인 경우 한번 더 체크
 							Check_Tree(ROOT, ROOT, NIL, BLACK, 0);
-						}
+						}	
 
-						node->Parent->Parent->Left->Color = BLACK;
 					}
 				}
 

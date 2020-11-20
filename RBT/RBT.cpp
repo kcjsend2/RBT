@@ -363,14 +363,52 @@ void Delete_BT(Node* root, int key)
 	}
 }
 
-void Delete_RBT(Node*& root, Node* NIL, Node* node)
+void Delete_RBT(Node*& root, Node* node, Node* NIL)
 {
 	Node* uncle = node->Parent->Right;
+	int value = 0;
 	if (root == NULL)
 	{
 		return;
 	}
 	if (uncle->Color == BLACK && uncle->Right->Color == RED)				 // case *-2
+	{
+		value = 2;
+	}
+	else if (uncle->Color == BLACK && uncle->Left->Color == RED && uncle->Right->Color == BLACK) // case*-3
+	{
+		value = 3;
+	}
+	else if (node->Parent->Color== RED)
+	{
+		if (uncle->Left->Color == BLACK && uncle->Color == BLACK)		 // case 1-1
+		{
+			value = 1;
+		}
+	}
+	else if (node->Parent->Color == BLACK)
+	{
+		if (uncle->Color == BLACK && uncle->Left->Color == BLACK && uncle->Right->Color == BLACK) // case 2-1
+		{
+			value = 4;
+		}
+		else if (uncle->Color == RED && uncle->Left->Color == BLACK && uncle->Right->Color == BLACK) // case 2-4
+		{
+			value = 5;
+		}
+	}
+
+	Delete(root, node, NIL, value);
+}
+
+void Delete(Node*& root, Node* node, Node* NIL, int value)
+{
+	if (value == 1)
+	{
+		node->Parent->Color = BLACK;										 // 부모 노드와 형제 노드의 색상을 맞바꾼다.
+		node->Parent->Right->Color = RED;
+	}
+	else if (value == 2)
 	{
 		if (node->Parent->Color == RED)										 // 부모 노드와 형제노드의 색이 다를 시 색상 바꾸기.
 		{
@@ -378,38 +416,26 @@ void Delete_RBT(Node*& root, Node* NIL, Node* node)
 			node->Parent->Right->Color = RED;
 		}
 		node->Parent->Right->Right->Color = BLACK;							 // 오른쪽 사촌 노드의 색깔 블랙으로 변경.
-		Left_Rotate(node->Parent, node->Parent->Right,NIL);					 // 부모 노드를 중심으로 왼쪽 회전
+		Left_Rotate(node->Parent, node->Parent->Right, NIL);				 // 부모 노드를 중심으로 왼쪽 회전
 	}
-	else if (uncle->Color == BLACK && uncle->Left->Color == RED && uncle->Right->Color == BLACK) // case*-3
+	else if (value == 3)
 	{
 		node->Parent->Right->Left->Color = BLACK;
 		node->Parent->Right->Color = RED;									 // 왼쪽 사촌 노드와 형제 노드의 색깔 변경.
 		Right_Rotate(node->Parent->Right->Left, node->Parent->Right, NIL);	 // 왼쪽 사촌 노드를 기준으로 오른쪽 회전.
-		node->Parent->Right->Right->Color = BLACK;							 // 이후 *-2와 동일.
+		Delete(root, node, NIL, 2);
+	}
+	else if (value == 4)
+	{
+		node->Parent->Right->Color = RED;							 // 형제 노드의 색깔을 블랙에서 레드로 변경.
+		Check_Tree(root, root, NIL, BLACK, 0);						 // 균형이 깨졌으므로 수정.
+	}
+	else if (value == 5)
+	{
+		node->Parent->Color = RED;
+		node->Parent->Right->Color = BLACK;
 		Left_Rotate(node->Parent, node->Parent->Right, NIL);
-
-	}
-	else if (node->Parent->Color== RED)
-	{
-		if (uncle->Left->Color == BLACK && uncle->Color == BLACK)		 // case 1-1 : 부모 노드와 형제 노드의 색상을 맞바꾼다.
-		{
-			node->Parent->Color = BLACK;
-			node->Parent->Right->Color = RED;
-		}
-	}
-	else if (node->Parent->Color == BLACK)
-	{
-		if (uncle->Color == BLACK && uncle->Left->Color == BLACK && uncle->Right->Color == BLACK) // case 2-1
-		{
-			node->Parent->Right->Color = RED;							 // 형제 노드의 색깔을 블랙에서 레드로 변경.
-			Check_Tree(root, root, NIL, BLACK, 0);
-		}
-		else if (uncle->Color == RED && uncle->Left->Color == BLACK && uncle->Right->Color == BLACK) // case 2-4
-		{
-			node->Parent->Color = RED;
-			node->Parent->Right->Color = BLACK;
-			Left_Rotate(node->Parent, node->Parent->Right, NIL);
-		}
+		Delete(root, node, NIL, 1);
 	}
 }
 

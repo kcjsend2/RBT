@@ -363,43 +363,6 @@ void Delete_BT(Node* root, int key)
 	}
 }
 
-void Delete_RBT(Node*& root, Node* node, Node* NIL)
-{
-	Node* uncle = node->Parent->Right;
-	int value = 0;
-	if (root == NULL)
-	{
-		return;
-	}
-	if (uncle->Color == BLACK && uncle->Right->Color == RED)				 // case *-2
-	{
-		value = 2;
-	}
-	else if (uncle->Color == BLACK && uncle->Left->Color == RED && uncle->Right->Color == BLACK) // case*-3
-	{
-		value = 3;
-	}
-	else if (node->Parent->Color== RED)
-	{
-		if (uncle->Left->Color == BLACK && uncle->Color == BLACK)		 // case 1-1
-		{
-			value = 1;
-		}
-	}
-	else if (node->Parent->Color == BLACK)
-	{
-		if (uncle->Color == BLACK && uncle->Left->Color == BLACK && uncle->Right->Color == BLACK) // case 2-1
-		{
-			value = 4;
-		}
-		else if (uncle->Color == RED && uncle->Left->Color == BLACK && uncle->Right->Color == BLACK) // case 2-4
-		{
-			value = 5;
-		}
-	}
-
-	Delete(root, node, NIL, value);
-}
 
 void Delete(Node*& root, Node* node, Node* NIL, int value)
 {
@@ -437,6 +400,44 @@ void Delete(Node*& root, Node* node, Node* NIL, int value)
 		Left_Rotate(node->Parent, node->Parent->Right, NIL);
 		Delete(root, node, NIL, 1);
 	}
+}
+
+void Delete_RBT(Node*& root, Node* node, Node* NIL)
+{
+	Node* uncle = node->Parent->Right;
+	int value = 0;
+	if (root == NULL)
+	{
+		return;
+	}
+	if (uncle->Color == BLACK && uncle->Right->Color == RED)				 // case *-2
+	{
+		value = 2;
+	}
+	else if (uncle->Color == BLACK && uncle->Left->Color == RED && uncle->Right->Color == BLACK) // case*-3
+	{
+		value = 3;
+	}
+	else if (node->Parent->Color== RED)
+	{
+		if (uncle->Left->Color == BLACK && uncle->Color == BLACK)		 // case 1-1
+		{
+			value = 1;
+		}
+	}
+	else if (node->Parent->Color == BLACK)
+	{
+		if (uncle->Color == BLACK && uncle->Left->Color == BLACK && uncle->Right->Color == BLACK) // case 2-1
+		{
+			value = 4;
+		}
+		else if (uncle->Color == RED && uncle->Left->Color == BLACK && uncle->Right->Color == BLACK) // case 2-4
+		{
+			value = 5;
+		}
+	}
+
+	Delete(root, node, NIL, value);
 }
 
 void Print_RBT(Node* node, int max_level, int my_level, int cnt)//색깔 블랙, 레드 나눠서 출력

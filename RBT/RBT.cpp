@@ -414,10 +414,8 @@ Node* min_search(Node* node, Node* NIL)
 
 void RBT_Delete_Fixup(Node*& root, Node* node, Node* NIL, int value)
 {
-	cout << "RBT_Delete_Fixup : value : " << value << endl;
 	if (value == 0)
 	{
-		printf("\n수정 불필요!\n");
 		return;
 	}
 	else if (value == 1) // 1-1
@@ -448,7 +446,7 @@ void RBT_Delete_Fixup(Node*& root, Node* node, Node* NIL, int value)
 	else if (value == 4) // 2-1
 	{
 		node->Parent->Right->Color = RED;									 // 형제 노드의 색깔을 블랙에서 레드로 변경.
-		check_tree(root, NIL);												 // 균형이 깨졌으므로 수정.
+																			 // 균형이 깨졌으므로 수정.
 		return;
 	}
 	else if (value == 5) // 2-4
@@ -478,10 +476,15 @@ Node*  Delete_RBT(Node*& root, Node* NIL, int key)
 	}
 	else
 	{
-		printf("%d 삭제\n", key);
-		if (root->Left == NIL)
+		if (root->Left == NULL && root->Right == NULL)
 		{
-
+			Node* temp = root;
+			root = NIL;
+			free(temp);
+			return root;
+		}
+		else if (root->Left == NIL)
+		{
 			Node* temp = root->Right;
 			temp->key = root->Right->key;
 			temp->Color = root->Right->Color;
@@ -546,7 +549,6 @@ Node*  Delete_RBT(Node*& root, Node* NIL, int key)
 			}
 		}
 	}
-	cout << "Delete_RBT : value : " << value << endl;
 	RBT_Delete_Fixup(root, root, NIL, value);
 }
 
@@ -677,7 +679,7 @@ int main()
 
 	Insert_RBT(ROOT, NIL, 18, 0);
 
-	Delete_RBT(ROOT, NIL, 5);
+	Delete_RBT(ROOT, NIL, 18);
 	
 	RBT_queue_Print(queue, NIL, ROOT);
 	check_tree(ROOT, NIL);

@@ -459,7 +459,7 @@ void RBT_Delete_Fixup(Node*& root, Node* node, Node* NIL, int value)
 	}
 }
 
-Node*  Delete_RBT(Node*& root, Node* NIL, int key)
+Node* Delete_RBT(Node*& root, Node* NIL, int key)
 {
 	int value = 0;
 	if (root == NULL)
@@ -476,7 +476,7 @@ Node*  Delete_RBT(Node*& root, Node* NIL, int key)
 	}
 	else 
 	{
-		if (root->Left == NULL && root->Right == NULL)
+		if (root->Left == NIL && root->Right == NIL)
 		{
 			Node* temp = root;
 			root = NIL;

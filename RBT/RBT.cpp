@@ -476,6 +476,15 @@ Node* Delete_RBT(Node*& root, Node* NIL, int key)
 		{
 			Node* temp = root->Right;
 			temp->Color = root->Right->Color;
+			if (root->Parent->Left == root)
+			{
+				root->Parent->Left = NIL;
+			}
+			else if (root->Parent->Right == root)
+			{
+				root->Parent->Right = NIL;
+			}
+
 			free(root);
 			printf("%d 삭제\n", key);
 			return temp;

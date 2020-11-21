@@ -515,7 +515,7 @@ Node* Delete_RBT(Node*& root, Node* NIL, int key)
 			free(root);
 			return temp;
 		}
-		Node* successor = NIL;
+		Node* successor = root->Left;
 
 		root->key = successor->key;
 		root->Color = successor->Color;
@@ -681,7 +681,7 @@ int main()
 
 	RBT_queue_Print(queue, NIL, ROOT);
 
-	Delete_RBT(ROOT, NIL, 18);
+	Delete_RBT(ROOT, NIL, 20);
 	
 	RBT_queue_Print(queue, NIL, ROOT);
 	check_tree(ROOT, NIL);

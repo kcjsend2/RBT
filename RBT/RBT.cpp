@@ -78,7 +78,7 @@ void Left_Rotate(Node*& ROOT, Node* pivot, Node* NIL)	//ROOT는 최상단, pivot
 	Node* ptmp = pivot;										//ptmp에 A(=pivot)를 대입
 	tmp->Parent = pivot->Parent;						//B(=tmp)의 부모에 A(pivot)의 기존 부모를 연결 -> 기존 A는 root였지만 이젠 B가 root가 되므로.
 
-	if (pivot->Parent != NULL)							//A의 부모가 NULL이 아니면(기존 root가 제일 최상단이 아니었다면)
+	if (pivot->Parent != NULL && pivot->Parent != NIL)							//A의 부모가 NULL이 아니면(기존 root가 제일 최상단이 아니었다면)
 	{
 		if (pivot->Parent->Left == pivot)				//A의 부모의 left가 A였으면
 		{
@@ -118,7 +118,7 @@ void Right_Rotate(Node*& ROOT, Node* pivot, Node* NIL)//ROOT는 최상단, pivot
 	Node* ptmp = pivot;										//ptmp에 B를 대입
 	tmp->Parent = pivot->Parent;						//A의 부모를 기존 B의 부모로 연결
 
-	if (pivot->Parent != NULL)							//B의 부모가 NULL이 아니었다면
+	if (pivot->Parent != NULL && pivot->Parent != NIL)							//B의 부모가 NULL이 아니었다면
 	{
 		if (pivot->Parent->Left == pivot)				//기존 B가 부모의 왼쪽노드였으면
 		{
@@ -474,7 +474,7 @@ Node*  Delete_RBT(Node*& root, Node* NIL, int key)
 	{
 		Delete_RBT(root->Right, NIL, key);
 	}
-	else
+	else 
 	{
 		if (root->Left == NULL && root->Right == NULL)
 		{
@@ -623,7 +623,7 @@ void RBT_queue_Print(queue<Node*>q, Node* NIL, Node* ROOT)//Dequeue할 때 Print
 		Node* tmp = q.front();//큐의 제일 앞쪽(먼저 들어온 노드)
 		my_level = my_level_counter(cnt);//내 현재 층 계산
 
-		q.pop();//큐에써 빼기
+		q.pop();//큐에서 빼기
 		Print_RBT(tmp, max_level, my_level, cnt);//현재 자기 자신의 노드 출력 및 줄바꿈
 		++cnt;
 
@@ -679,8 +679,10 @@ int main()
 
 	Insert_RBT(ROOT, NIL, 18, 0);
 
+	RBT_queue_Print(queue, NIL, ROOT);
+
 	Delete_RBT(ROOT, NIL, 18);
 	
 	RBT_queue_Print(queue, NIL, ROOT);
 	check_tree(ROOT, NIL);
-}
+}	

@@ -416,7 +416,7 @@ void RBT_Delete_Fixup(Node*& root, Node* node, Node* NIL, int value)
 {
 	if (value == 0)
 	{
-		printf("\n오류 : 딜리트 미발동!\n");
+		printf("\n수정 불필요!\n");
 		return;
 	}
 	else if (value == 1) // 1-1
@@ -460,7 +460,7 @@ Node* Delete_RBT(Node*& root, Node* NIL, int key)
 	int value = 0;
 	if (root == NULL)
 	{
-		return;
+		return root;
 	}
 	if (key < root->key)
 	{
@@ -489,6 +489,7 @@ Node* Delete_RBT(Node*& root, Node* NIL, int key)
 		Node* successor = min_search(root->Right, NIL);
 
 		root->key = successor->key;
+		root->Color = successor->Color;
 		root->Right = Delete_RBT(root->Right, NIL, successor->key);												 // 여기까지 BT 삭제와 동일
 
 		Node* siblings = root->Parent->Right;
@@ -520,7 +521,7 @@ Node* Delete_RBT(Node*& root, Node* NIL, int key)
 		}
 	}
 
-	RBT_Delete_Fixup(root, root, NIL, value);
+	//RBT_Delete_Fixup(root, root, NIL, value);
 	printf("%d 삭제\n", key);
 }
 
@@ -647,7 +648,7 @@ int main()
 
 	Insert_RBT(ROOT, NIL, 18, 0);
 
-	//Delete_RBT(ROOT, NIL, 40);
+	Delete_RBT(ROOT, NIL, 40);
 	
 	RBT_queue_Print(queue, NIL, ROOT);
 }

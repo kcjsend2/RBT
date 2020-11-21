@@ -402,9 +402,24 @@ void Delete_BT(Node* root, int key)
 	}
 }
 
-void Delete(Node*& root, Node* node, Node* NIL, int value)
+Node* min_search(Node* node, Node* NIL)
 {
-	if (value == 1) // 1-1
+	Node* curr = node;
+	while (curr->Left != NIL)
+	{
+		curr = curr->Left;
+	}
+	return curr;
+}
+
+void RBT_Delete_Fixup(Node*& root, Node* node, Node* NIL, int value)
+{
+	if (value == 0)
+	{
+		printf("\n오류 : 딜리트 미발동!\n");
+		return;
+	}
+	else if (value == 1) // 1-1
 	{
 		node->Parent->Color = BLACK;										 // 부모 노드와 형제 노드의 색상을 맞바꾼다.
 		node->Parent->Right->Color = RED;
@@ -424,24 +439,25 @@ void Delete(Node*& root, Node* node, Node* NIL, int value)
 		node->Parent->Right->Left->Color = BLACK;
 		node->Parent->Right->Color = RED;									 // 왼쪽 사촌 노드와 형제 노드의 색깔 변경.
 		Right_Rotate(node->Parent->Right->Left, node->Parent->Right, NIL);	 // 왼쪽 사촌 노드를 기준으로 오른쪽 회전.
-		Delete(root, node, NIL, 2);											 // 이후 *-2와 동일.
+		RBT_Delete_Fixup(root, node, NIL, 2);											 // 이후 *-2와 동일.
 	}
 	else if (value == 4) // 2-1
 	{
-		node->Parent->Right->Color = RED;							 // 형제 노드의 색깔을 블랙에서 레드로 변경.
-		check_tree(root, NIL);						 // 균형이 깨졌으므로 수정.
+		node->Parent->Right->Color = RED;									 // 형제 노드의 색깔을 블랙에서 레드로 변경.
+		check_tree(root, NIL);												 // 균형이 깨졌으므로 수정.
 	}
 	else if (value == 5) // 2-4
 	{
 		node->Parent->Color = RED;
 		node->Parent->Right->Color = BLACK;
 		Left_Rotate(node->Parent, node->Parent->Right, NIL);
-		Delete(root, node, NIL, 1);
+		RBT_Delete_Fixup(root, node, NIL, 1);
 	}
 }
 
-void Delete_RBT(Node*& root, Node* NIL, int key)
+Node* Delete_RBT(Node*& root, Node* NIL, int key)
 {
+	int value = 0;
 	if (root == NULL)
 	{
 		return;
@@ -456,26 +472,44 @@ void Delete_RBT(Node*& root, Node* NIL, int key)
 	}
 	else
 	{
-		Node* siblings = node->Parent->Right;
-		int value = 0;
-		if (siblings->Color == BLACK && siblings->Right->Color == RED)				 // case *-2
+		if (root->Left == NIL)
+		{
+			Node* temp = root->Right;
+			temp->Color = root->Right->Color;
+			free(root);
+			return temp;
+		}
+		else if (root->Right == NIL)
+		{
+			Node* temp = root->Left;
+			temp->Color = root->Left->Color;
+			free(root);
+			return temp;
+		}
+		Node* successor = min_search(root->Right, NIL);
+
+		root->key = successor->key;
+		root->Right = Delete_RBT(root->Right, NIL, successor->key);												 // 여기까지 BT 삭제와 동일
+
+		Node* siblings = root->Parent->Right;
+		if (siblings->Color == BLACK && siblings->Right->Color == RED)											 // case *-2
 		{
 			value = 2;
 		}
-		else if (siblings->Color == BLACK && siblings->Left->Color == RED && siblings->Right->Color == BLACK) // case*-3
+		else if (siblings->Color == BLACK && siblings->Left->Color == RED && siblings->Right->Color == BLACK)	 // case*-3
 		{
 			value = 3;
 		}
-		else if (node->Parent->Color == RED)
+		else if (root->Parent->Color == RED)
 		{
-			if (siblings->Left->Color == BLACK && siblings->Color == BLACK)		 // case 1-1
+			if (siblings->Left->Color == BLACK && siblings->Color == BLACK)										 // case 1-1
 			{
 				value = 1;
 			}
 		}
-		else if (node->Parent->Color == BLACK)
+		else if (root->Parent->Color == BLACK)
 		{
-			if (siblings->Color == BLACK && siblings->Left->Color == BLACK && siblings->Right->Color == BLACK) // case 2-1
+			if (siblings->Color == BLACK && siblings->Left->Color == BLACK && siblings->Right->Color == BLACK)	 // case 2-1
 			{
 				value = 4;
 			}
@@ -486,7 +520,7 @@ void Delete_RBT(Node*& root, Node* NIL, int key)
 		}
 	}
 
-	Delete(root, node, NIL, value);
+	RBT_Delete_Fixup(root, root, NIL, value);
 	printf("%d 삭제\n", key);
 }
 

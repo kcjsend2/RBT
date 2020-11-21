@@ -681,7 +681,7 @@ int main()
 
 	RBT_queue_Print(queue, NIL, ROOT);
 
-	Delete_RBT(ROOT, NIL, 20);
+	Delete_RBT(ROOT, NIL, 18);
 	
 	RBT_queue_Print(queue, NIL, ROOT);
 	check_tree(ROOT, NIL);

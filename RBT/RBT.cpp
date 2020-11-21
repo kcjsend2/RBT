@@ -621,18 +621,22 @@ void RBT_queue_Print(queue<Node*>q, Node* NIL, Node* ROOT)//Dequeue할 때 Print
 
 		if (tmp->Left != NIL)
 			q.push(tmp->Left);//왼쪽 노드 탐색 후 큐에 넣기
-		else
+		else if(tmp->key != -1)
 		{
 			Node* blank = new Node;
 			blank->key = -1;
+			blank->Left = NIL;
+			blank->Right = NIL;
 			q.push(blank);
 		}
 		if (tmp->Right != NIL)
 			q.push(tmp->Right);//오른쪽 노드 탐색 후 큐에 넣기
-		else
+		else if(tmp->key != -1)
 		{
 			Node* blank = new Node;
 			blank->key = -1;
+			blank->Left = NIL;
+			blank->Right = NIL;
 			q.push(blank);
 		}
 	}

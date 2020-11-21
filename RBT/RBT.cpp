@@ -477,13 +477,24 @@ Node* Delete_RBT(Node*& root, Node* NIL, int key)
 			Node* temp = root->Right;
 			temp->Color = root->Right->Color;
 			free(root);
+			printf("%d 삭제\n", key);
 			return temp;
 		}
 		else if (root->Right == NIL)
 		{
 			Node* temp = root->Left;
 			temp->Color = root->Left->Color;
+			if (root->Parent->Left == root)
+			{
+				root->Parent->Left = NIL;
+			}
+			else if (root->Parent->Right == root)
+			{
+				root->Parent->Right = NIL;
+			}
+
 			free(root);
+			printf("%d 삭제\n", key);
 			return temp;
 		}
 		Node* successor = min_search(root->Right, NIL);
@@ -522,7 +533,6 @@ Node* Delete_RBT(Node*& root, Node* NIL, int key)
 	}
 
 	//RBT_Delete_Fixup(root, root, NIL, value);
-	printf("%d 삭제\n", key);
 }
 
 void Print_RBT(Node* node, int max_level, int my_level, int cnt)//색깔 블랙, 레드 나눠서 출력
@@ -648,7 +658,8 @@ int main()
 
 	Insert_RBT(ROOT, NIL, 18, 0);
 
-	Delete_RBT(ROOT, NIL, 15);
+	Delete_RBT(ROOT, NIL, 18);
 	
 	RBT_queue_Print(queue, NIL, ROOT);
+	check_tree(ROOT, NIL);
 }

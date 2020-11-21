@@ -462,7 +462,7 @@ void RBT_Delete_Fixup(Node*& root, Node* node, Node* NIL, int value)
 Node*  Delete_RBT(Node*& root, Node* NIL, int key)
 {
 	int value = 0;
-	if (root == NULL)
+	if (root == NULL || root == NIL)
 	{
 		return root;
 	}
@@ -515,7 +515,7 @@ Node*  Delete_RBT(Node*& root, Node* NIL, int key)
 			free(root);
 			return temp;
 		}
-		Node* successor = min_search(root->Right, NIL);
+		Node* successor = NIL;
 
 		root->key = successor->key;
 		root->Color = successor->Color;

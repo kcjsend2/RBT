@@ -492,7 +492,7 @@ Node* Delete_RBT(Node*& root, Node* NIL, int key)
 		root->Color = successor->Color;
 		root->Right = Delete_RBT(root->Right, NIL, successor->key);												 // 여기까지 BT 삭제와 동일
 
-		Node* siblings = root->Parent->Right;
+		/*Node* siblings = root->Parent->Right;
 		if (siblings->Color == BLACK && siblings->Right->Color == RED)											 // case *-2
 		{
 			value = 2;
@@ -518,7 +518,7 @@ Node* Delete_RBT(Node*& root, Node* NIL, int key)
 			{
 				value = 5;
 			}
-		}
+		}*/
 	}
 
 	//RBT_Delete_Fixup(root, root, NIL, value);
@@ -648,7 +648,7 @@ int main()
 
 	Insert_RBT(ROOT, NIL, 18, 0);
 
-	Delete_RBT(ROOT, NIL, 40);
+	Delete_RBT(ROOT, NIL, 15);
 	
 	RBT_queue_Print(queue, NIL, ROOT);
 }

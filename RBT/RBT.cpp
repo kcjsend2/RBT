@@ -439,7 +439,7 @@ void RBT_Delete_Fixup(Node*& root, Node* node, Node* NIL, int value)
 		node->Parent->Right->Left->Color = BLACK;
 		node->Parent->Right->Color = RED;									 // 왼쪽 사촌 노드와 형제 노드의 색깔 변경.
 		Right_Rotate(node->Parent->Right->Left, node->Parent->Right, NIL);	 // 왼쪽 사촌 노드를 기준으로 오른쪽 회전.
-		RBT_Delete_Fixup(root, node, NIL, 2);											 // 이후 *-2와 동일.
+		RBT_Delete_Fixup(root, node, NIL, 2);								 // 이후 *-2와 동일.
 	}
 	else if (value == 4) // 2-1
 	{

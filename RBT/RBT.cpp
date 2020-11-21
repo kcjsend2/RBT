@@ -402,16 +402,6 @@ void Delete_BT(Node* root, int key)
 	}
 }
 
-Node* min_search(Node* node, Node* NIL)
-{
-	Node* curr = node;
-	while (curr->Left != NIL)
-	{
-		curr = curr->Left;
-	}
-	return curr;
-}
-
 void RBT_Delete_Fixup(Node*& root, Node* node, Node* NIL, int value)
 {
 	if (value == 0)

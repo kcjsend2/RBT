@@ -402,25 +402,6 @@ void Delete_BT(Node* root, int key)
 	}
 }
 
-Node* Del_Search(Node*& root, Node* NIL, int key)
-{
-	if (root == NULL)
-	{
-		return root;
-	}
-	if (key < root->key)
-	{
-		Del_Search(root->Left, NIL, key);
-	}
-	else if (key > root->key)
-	{
-		Del_Search(root->Right, NIL, key);
-	}
-
-
-	return root;
-}
-
 void Delete(Node*& root, Node* node, Node* NIL, int value)
 {
 	if (value == 1) // 1-1
@@ -461,42 +442,47 @@ void Delete(Node*& root, Node* node, Node* NIL, int value)
 
 void Delete_RBT(Node*& root, Node* NIL, int key)
 {
-	Node* node = Del_Search(root, NIL, key);
-	Node* tmp = NULL;
-	if ((node->Left == NIL && node->Right != NIL) || (node->Left != NIL && node->Right == NIL))
-	{
-
-	}
-	else
+	if (root == NULL)
 	{
 		return;
 	}
-	Node* siblings = node->Parent->Right;
-	int value = 0;
-	if (siblings->Color == BLACK && siblings->Right->Color == RED)				 // case *-2
+	if (key < root->key)
 	{
-		value = 2;
+		Delete_RBT(root->Left, NIL, key);
 	}
-	else if (siblings->Color == BLACK && siblings->Left->Color == RED && siblings->Right->Color == BLACK) // case*-3
+	else if (key > root->key)
 	{
-		value = 3;
+		Delete_RBT(root->Right, NIL, key);
 	}
-	else if (node->Parent->Color== RED)
+	else
 	{
-		if (siblings->Left->Color == BLACK && siblings->Color == BLACK)		 // case 1-1
+		Node* siblings = node->Parent->Right;
+		int value = 0;
+		if (siblings->Color == BLACK && siblings->Right->Color == RED)				 // case *-2
 		{
-			value = 1;
+			value = 2;
 		}
-	}
-	else if (node->Parent->Color == BLACK)
-	{
-		if (siblings->Color == BLACK && siblings->Left->Color == BLACK && siblings->Right->Color == BLACK) // case 2-1
+		else if (siblings->Color == BLACK && siblings->Left->Color == RED && siblings->Right->Color == BLACK) // case*-3
 		{
-			value = 4;
+			value = 3;
 		}
-		else if (siblings->Color == RED && siblings->Left->Color == BLACK && siblings->Right->Color == BLACK) // case 2-4
+		else if (node->Parent->Color == RED)
 		{
-			value = 5;
+			if (siblings->Left->Color == BLACK && siblings->Color == BLACK)		 // case 1-1
+			{
+				value = 1;
+			}
+		}
+		else if (node->Parent->Color == BLACK)
+		{
+			if (siblings->Color == BLACK && siblings->Left->Color == BLACK && siblings->Right->Color == BLACK) // case 2-1
+			{
+				value = 4;
+			}
+			else if (siblings->Color == RED && siblings->Left->Color == BLACK && siblings->Right->Color == BLACK) // case 2-4
+			{
+				value = 5;
+			}
 		}
 	}
 
